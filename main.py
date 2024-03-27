@@ -16,8 +16,7 @@ SOCKET_HOST = '127.0.0.1'
 SOCKET_PORT = 5000
 
 
-class GoitFramework(BaseHTTPRequestHandler):
-
+class GoItFramework(BaseHTTPRequestHandler):
     def do_GET(self):
         route = urllib.parse.urlparse(self.path)
         match route.path:
@@ -48,8 +47,8 @@ class GoitFramework(BaseHTTPRequestHandler):
         self.send_response(status_code)
         self.send_header(keyword='Content-Type', value='text/html')
         self.end_headers()
-        with open(filename, 'rb') as file:
-            self.wfile.write(file.read())
+        with open(filename, 'rb') as f:
+            self.wfile.write(f.read())
 
     def send_static(self, filename, status_code=200):
         self.send_response(status_code)
@@ -59,8 +58,8 @@ class GoitFramework(BaseHTTPRequestHandler):
         else:
             self.send_header('Content-Type', 'text/plain')
         self.end_headers()
-        with open(filename, 'rb') as file:
-            self.wfile.write(file.read())
+        with open(filename, 'rb') as f:
+            self.wfile.write(f.read())
 
 
 def save_data_from_form(data):
@@ -78,10 +77,10 @@ def save_data_from_form(data):
             file.seek(0)
             json.dump(stored_data, file, ensure_ascii=False, indent=4)
             file.truncate()
-    except ValueError as err:
-        logging.error(err)
-    except OSError as err:
-        logging.error(err)
+    except ValueError as e:
+        logging.error(e)
+    except OSError as e:
+        logging.error(e)
 
 
 def run_socket_server(host, port):
@@ -101,7 +100,7 @@ def run_socket_server(host, port):
 
 def run_http_server(host, port):
     address = (host, port)
-    http_server = HTTPServer(address, GoitFramework)
+    http_server = HTTPServer(address, GoItFramework)
     logging.info("Starting http server")
     try:
         http_server.serve_forever()
@@ -113,7 +112,7 @@ def run_http_server(host, port):
 
 def run_server():
     address = ('HTTP_HOST', HTTP_PORT)
-    http_server = HTTPServer(address, GoitFramework)
+    http_server = HTTPServer(address, GoItFramework)
     try:
         http_server.serve_forever()
     except KeyboardInterrupt:
